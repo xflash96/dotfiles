@@ -1,0 +1,16 @@
+[color]
+	ui = auto
+[user]
+	name = Po-Wei Wang
+	email = xflash96@gmail.com
+[giggle]
+	main-window-maximized = true
+	main-window-geometry = 0x0+0+0
+	history-view-vpane-position = 340
+	main-window-view = HistoryView
+	file-view-vpane-position = 294
+[github]
+	user = xflash96
+
+[merge]
+	tool = kdiff3
