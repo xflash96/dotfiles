@@ -1,11 +1,7 @@
 set nocompatible
-execute pathogen#infect()
 set mouse=a
 source $VIMRUNTIME/colors/torte.vim
 filetype off
-set rtp+=$GOROOT/misc/vim
-"set rtp+=/home/will/repos/powerline/powerline/bindings/vim
-"set rtp+=$HOME/repos/supertab
 syntax on
 filetype plugin indent on
 
@@ -13,7 +9,7 @@ let g:airline#extensions#whitespace#enabled = 0
 let g:airline_powerline_fonts = 1
 
 map \c :update<CR>:make %<<CR>:cwindow<CR>
-map \m :update<CR>:make<CR>:cwindow<CR>
+map \m :update<CR>:Make<CR>:cwindow<CR>
 map \r :!./%<<CR>
 map \t :make install<CR>
 map \d :make deploy<CR>
@@ -29,6 +25,9 @@ map <F5> <ESC>:tabe
 map <F8> <ESC>:TagbarToggle<CR>
 map! <F8> <ESC>:TagbarToggle<CR>
 map \n <ESC>:NERDTreeTabsToggle<CR>
+map \k :silent !man <cword><cr>:redraw!<cr>
+
+highlight DiffAdd ctermfg=253 ctermbg=237 guifg=#dadada guibg=#3a3a3a
 
 if has("autocmd")
 	"au FileType python set omnifunc=pythoncomplete#Complete
@@ -50,6 +49,7 @@ if has("autocmd")
 	autocmd BufRead,BufNewFile *.td     set filetype=tablegen
 	autocmd BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
 	autocmd BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
+	autocmd Filetype tex setlocal expandtab tabstop=8 shiftwidth=8 
 endif
 
 set hls nu ruler ai cindent autoread title showcmd sm is "nofen fdl=0
@@ -67,26 +67,44 @@ let g:jedi#popup_on_dot = 0
 nnoremap <leader>fw :execute "vimgrep ".expand("<cword>")." %"<cr>:copen<cr>
 " find last search in quickfix
 nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
-let g:Gitv_OpenHorizontal = 1
-let g:Gitv_TruncateCommitSubjects = 1
-let g:ctrlp_match_window_bottom = 0
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_switch_buffer = 0
-
-set undodir=~/.vim/undo
-set undofile
-set undolevels=1000
-set undoreload=10000
-
-map \k :silent !man <cword><cr>:redraw!<cr>
-
-" prevent wrong expansion on latex file
-autocmd Filetype tex setlocal expandtab tabstop=8 shiftwidth=8 
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
 \ if line("'\"") > 0 && line("'\"") <= line("$") |
 \   exe "normal! g`\"" |
 \ endif
-set clipboard=unnamed
 highlight clear SignColumn
+
+set undodir=~/.vim/undo
+set undofile
+set undolevels=1000
+set undoreload=10000
+
+set clipboard=unnamed
+
+" Plugins
+call plug#begin('~/.vim/plugged')
+Plug 'kien/ctrlp.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'bling/vim-airline'
+Plug 'enricobacis/vim-airline-clock'
+Plug 'google/vim-glaive'
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-dispatch'
+Plug 'mhinz/vim-signify'
+Plug 'majutsushi/tagbar'
+Plug '~/.fzf'
+call plug#end()
+
+let g:ctrlp_match_window_bottom = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_switch_buffer = 0
+
+" prevent wrong expansion on latex file
+
+" let g:clang_format_executable = '/usr/local/bin/clang-format'
+call glaive#Install()
+Glaive codefmt plugin[mappings]
