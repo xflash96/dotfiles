@@ -9,6 +9,7 @@ cp dotfiles/tmux.conf ~/.tmux.conf
 # exit 1
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all
 
 # vim
 mkdir -p ~/.vim/undo

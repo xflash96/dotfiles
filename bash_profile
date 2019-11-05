@@ -47,27 +47,12 @@ alias ...='cd ../../../'
 
 # readline
 export INPUTRC=$HOME/.inputrc
-
 # bash completion
 #export GOROOT=$HOME/repos/go
 export GOPATH=$HOME/gopkg
 export IACAPATH=$HOME/repos/iaca-mac64
-
 export PATH=$HOME/bin:$GOROOT/bin:$IACAPATH/bin:$HOME/gopkg/bin:/usr/local/bin:$PATH
 export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$IACAPATH/lib
-
-#source $HOME/bin/git-prompt.bash
-
-if [ -n "$SSH_CLIENT" ]; then
-	prompt_host="\[\e[00;32m\]\h "
-fi;
-export PS1="${prompt_host}\[\e[00;33m\]\A \[\e[00;34m\]\w \[\e[0m\]"
-export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
-#PROMPT_COMMAND='history -a; history -n'
-
-shopt -s histappend
-PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
-
 export CC=gcc
 export CXX=g++
 export ASAN_SYMBOLIZER_PATH=/usr/local/bin/llvm-symbolizer-3.4
@@ -77,4 +62,20 @@ export LC_CTYPE="en_US.UTF-8"
 unset ignoreeof
 export DISPLAY=:0
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#source $HOME/bin/git-prompt.bash
+if [ -n "$ZSH_VERSION" ]; then
+	if [ -n "$SSH_CLIENT" ]; then
+		prompt_host="%{$fg[green]%}%m "
+	fi;
+	PS1="${prompt_host}%{$fg[yellow]%}%T %{$fg[blue]%}%~ %{$fg[green]%}$%{$reset_color%} "
+else
+	if [ -n "$SSH_CLIENT" ]; then
+		prompt_host="\[\e[00;32m\]\h "
+	fi;
+	export PS1="${prompt_host}\[\e[00;33m\]\A \[\e[00;34m\]\w \[\e[0m\]"
+	shopt -s histappend
+	[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+fi
+
+export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
+PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
