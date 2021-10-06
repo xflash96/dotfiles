@@ -11,13 +11,29 @@ let g:airline_powerline_fonts = 1
 map \c :update<CR>:make %<<CR>:cwindow<CR>
 map \m :update<CR>:Make<CR>:cwindow<CR>
 map \r :!./%<<CR>
-map \t :make install<CR>
+map \t :Make! install<CR>
 map \d :make deploy<CR>
 map \x :make clean<CR>
 map \sn :set nu!<CR>
 map \ss <ESC>:if exists("syntax_on")<BAR>syntax off<BAR><CR>else<BAR>syntax on<BAR>endif<CR>
-map J gT
-map K gt
+
+" Move to next / previous tab
+"
+map <nowait><silent>[ gT
+map <nowait><silent>] gt
+"nnoremap <nowait><silent> [ :tabprevious<CR>
+"nnoremap <nowait><silent> ] :tabnext<CR>
+
+function! MakeBracketMaps()
+    nnoremap <nowait><silent><buffer> [ :tabprevious<CR>
+    nnoremap <nowait><silent><buffer> ] :tabnext<CR>
+endfunction
+
+augroup bracketmaps
+    autocmd!
+    autocmd BufEnter * call MakeBracketMaps()
+augroup END
+
 map <C-j> <PageDown>
 map <C-k> <PageUp>
 map! <F5> <ESC>:tabe 
@@ -50,6 +66,7 @@ if has("autocmd")
 	autocmd BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
 	autocmd BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
 	autocmd Filetype tex setlocal expandtab tabstop=8 shiftwidth=8 
+	autocmd Filetype tex set nocursorline nornu
 endif
 
 set hls nu ruler ai cindent autoread title showcmd sm is "nofen fdl=0
@@ -83,6 +100,11 @@ set undoreload=10000
 set clipboard=unnamed
 
 " Plugins
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 call plug#begin('~/.vim/plugged')
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
@@ -94,8 +116,16 @@ Plug 'google/vim-maktaba'
 Plug 'google/vim-codefmt'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-commentary'
 Plug 'mhinz/vim-signify'
 Plug 'majutsushi/tagbar'
+Plug 'rhysd/vim-grammarous'
+" Plug 'lervag/vimtex'
+Plug 'mattn/emmet-vim'
+Plug 'dense-analysis/ale'
+"Plug 'prabirshrestha/vim-lsp'
+
+
 Plug '~/.fzf'
 call plug#end()
 
@@ -103,8 +133,17 @@ let g:ctrlp_match_window_bottom = 0
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_switch_buffer = 0
 
+
 " prevent wrong expansion on latex file
 
 " let g:clang_format_executable = '/usr/local/bin/clang-format'
 call glaive#Install()
 Glaive codefmt plugin[mappings]
+
+" ALE
+let g:ale_cpp_cpplint_options = '--filter=-whitespace,-legal,-readability'
+let g:ale_completion_enabled = 1
+nnoremap <silent> K :ALEHover<CR>
+nnoremap <silent> D :ALEGoToDefinition<CR>
+nnoremap <silent> R :ALEFindReferences<CR>
+let g:airline#extensions#ale#enabled = 1

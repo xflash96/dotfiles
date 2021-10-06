@@ -50,15 +50,12 @@ export TORTOISEHG_PATH=$HOME/work/tortoisehg/stable
 
 # bash completion
 # source /etc/bash_completion.d/mercurial.sh
-export PATH=$HOME/go/bin:$PATH
+export GOROOT=$HOME/repos/go
 
-export GOROOT=$HOME/go/bin
-export GOOS=
-export GOARCH=
-export GOBIN=
-export GOPATH=$HOME/repos/go
+export PATH=$GOROOT/bin:$PATH
 
-source $HOME/bin/git-prompt.bash
+# source $HOME/bin/git-prompt.bash
+
 PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] '
 export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
 #PROMPT_COMMAND='history -a; history -n'
