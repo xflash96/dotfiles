@@ -6,6 +6,7 @@ cp dotfiles/inputrc ~/.inputrc
 cp dotfiles/gdbinit ~/.gdbinit
 cp dotfiles/gitconfig ~/.gitconfig
 cp dotfiles/tmux.conf ~/.tmux.conf
+cp dotfiles/arc-completion.bash ~/.arc-completion.bash
 # exit 1
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf

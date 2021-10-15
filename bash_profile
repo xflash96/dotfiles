@@ -59,6 +59,7 @@ export ASAN_SYMBOLIZER_PATH=/usr/local/bin/llvm-symbolizer-3.4
 export PATH=/usr/local/sbin:$PATH
 export LANG=en_US.UTF-8 
 export LC_CTYPE="en_US.UTF-8"
+export TERM=screen-256color
 unset ignoreeof
 export DISPLAY=:0
 
@@ -76,6 +77,7 @@ else
 	shopt -s histappend
 	[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 fi
+[[ -f ~/.arc-completion.bash ]] && source ~/.arc-completion.bash
 
 export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
 PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
