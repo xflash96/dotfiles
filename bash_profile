@@ -7,6 +7,14 @@
 export HISTSIZE=50000
 export CLICOLOR=1
 
+#!/usr/bin/env bash
+
+if [ "$(uname)" == "Darwin" ]; then
+ 	:
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+ 	alias ls='ls --color'
+fi
+
 alias py='python'
 alias ipy='ipython'
 alias gpy='ipython --gthread -c "import gtk, gobject"'
