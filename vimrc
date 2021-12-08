@@ -124,6 +124,7 @@ Plug 'rhysd/vim-grammarous'
 Plug 'mattn/emmet-vim'
 Plug 'dense-analysis/ale'
 "Plug 'prabirshrestha/vim-lsp'
+Plug 'ahw/vim-pbcopy'
 
 
 Plug '~/.fzf'
@@ -132,6 +133,7 @@ call plug#end()
 let g:ctrlp_match_window_bottom = 0
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_switch_buffer = 0
+let g:vim_pbcopy_remote_cmd = '~/.iterm2/it2copy'
 
 
 " prevent wrong expansion on latex file

@@ -18,7 +18,6 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 vim +'PlugInstall --sync' +qa
 
-# pbcopy
+# it2copy
 mkdir ~/bin
-curl -o ~/bin/pbcopy https://raw.githubusercontent.com/skaji/remote-pbcopy-iterm2/master/pbcopy
-chmod +x ~/bin/pbcopy
+curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash
