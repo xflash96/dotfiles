@@ -89,3 +89,7 @@ fi
 
 export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
 PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+
+if [ -n "$SSH_AUTH_SOCK" ] && [ ! -n "$TMUX" ]; then
+    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+fi
