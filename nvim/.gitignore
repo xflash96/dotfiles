@@ -1,0 +1,9 @@
+# only backups dir must be created before use
+backups/*
+!backups/.gitignore
+swaps/
+undos/
+
+plugged/
+
+.netrwhist
