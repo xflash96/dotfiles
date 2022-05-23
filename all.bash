@@ -31,6 +31,6 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 
 # nvim
 mkdir -p ~/.config/nvim
-ln -s "$PWD/nvim/init.vim" ~/.config/nvim/init.vim
-ln -s nvim ~/.nvim
-ln -s nvimrc ~/.nvimrc
+ln -nsf "$PWD/nvim/init.vim" ~/.config/nvim/init.vim
+ln -nsf "$PWD/nvim" ~/.nvim
+ln -nsf "$PWD/nvimrc" ~/.nvimrc
