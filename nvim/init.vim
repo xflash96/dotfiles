@@ -10,4 +10,6 @@ let $MYVIMRC='~/.nvimrc'
 let $MYPLUGS='~/.nvim/plugs.vim'
 
 source ~/.nvimrc
-source ~/.nvim/plugs.vim
+if !exists('g:vscode')
+    source ~/.nvim/plugs.vim
+endif

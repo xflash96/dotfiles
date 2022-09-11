@@ -259,9 +259,9 @@ require'nvim-tree'.setup{
     },
 }
 
-require("toggleterm").setup{
-    shell = '/bin/bash --rcfile ~/.bash_profile',
-}
+-- require("toggleterm").setup{
+--     shell = '/bin/bash --rcfile ~/.bash_profile',
+-- }
 
 require("trouble").setup {
     mode = 'document_diagnostics'
