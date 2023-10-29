@@ -1,14 +1,39 @@
-# .bashrc
-#SSH_AUTH_SOCK=`ss -xl | grep -o '/run/user/1000/keyring-.*/ssh' | head -n 1`
-# [ -z "$SSH_AUTH_SOCK" ] || export SSH_AUTH_SOCK
-#eval `ssh-agent`
-
-# User specific aliases and functions
-export HISTSIZE=50000
-export CLICOLOR=1
-
 #!/usr/bin/env bash
 
+# general
+export LANG=en_US.UTF-8
+export LC_CTYPE="en_US.UTF-8"
+export TERM=screen-256color
+unset ignoreeof
+export DISPLAY=:0
+
+export EDITOR='vim'
+# color highlighting for manpages
+export MANPAGER='bash -c "vim -MRn -c \"set ft=man nomod nolist nospell nonu\" -c \"nm q :qa!<CR>\" -c \"nm <end> G\" -c \"nm <home> gg\"</dev/tty <(col -b)"'
+#export PAGER="$HOME/bin/vim-pager"
+export CVS_RSH=ssh
+
+ulimit -c unlimited
+export MANSECT='0p:3p:1p:3:2:1:4:5:6:7:8:9:l'#:n #tcl
+
+
+# history
+shopt -s histappend
+export HISTCONTROL=ignoreboth:erasedups
+export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
+export HISTSIZE=50000
+export HISTFILESIZE=50000
+export CLICOLOR=1
+
+
+# paths
+export PATH=$HOME/.local/bin:$HOME/bin:$GOROOT/bin:$IACAPATH/bin:$HOME/gopkg/bin:/usr/local/sbin:/usr/local/bin:$PATH
+export INPUTRC=$HOME/.inputrc
+export CC=gcc
+export CXX=g++
+
+
+# alias
 if [ "$(uname)" == "Darwin" ]; then
  	:
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
@@ -24,20 +49,6 @@ alias skim='open -a Skim'
 alias backtrace=gdb-backtrace
 alias bt=gdb-backtrace
 alias dstat='dstat -cdlmnpsy'
-#alias blender='/Applications/Blender/blender.app/Contents/MacOS/blender'
-#alias ls='ls --color'
-
-export EDITOR='vim'
-# color highlighting for manpages
-export MANPAGER='bash -c "vim -MRn -c \"set ft=man nomod nolist nospell nonu\" -c \"nm q :qa!<CR>\" -c \"nm <end> G\" -c \"nm <home> gg\"</dev/tty <(col -b)"'
-#export PAGER="$HOME/bin/vim-pager"
-export CVS_RSH=ssh
-
-export GNOME_DISABLE_CRASH_DIALOG=1
-export KDE_DEBUG=1
-ulimit -c unlimited
-
-export MANSECT='0p:3p:1p:3:2:1:4:5:6:7:8:9:l'#:n #tcl
 
 # grep
 alias egrep='egrep --color=tty -d skip'
@@ -53,25 +64,9 @@ alias ev=evince
 alias ..='cd ..'
 alias ...='cd ../../../'
 
-# readline
-export INPUTRC=$HOME/.inputrc
-# bash completion
-#export GOROOT=$HOME/repos/go
-export GOPATH=$HOME/gopkg
-export IACAPATH=$HOME/repos/iaca-mac64
-export PATH=$HOME/.local/bin:$HOME/bin:$GOROOT/bin:$IACAPATH/bin:$HOME/gopkg/bin:/usr/local/bin:$PATH
-export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$IACAPATH/lib
-export CC=gcc
-export CXX=g++
-export ASAN_SYMBOLIZER_PATH=/usr/local/bin/llvm-symbolizer-3.4
-export PATH=/usr/local/sbin:$PATH
-export LANG=en_US.UTF-8 
-export LC_CTYPE="en_US.UTF-8"
-export TERM=screen-256color
-unset ignoreeof
-export DISPLAY=:0
 
-#source $HOME/bin/git-prompt.bash
+
+# git-prompt
 if [ -n "$ZSH_VERSION" ]; then
 	if [ -n "$SSH_CLIENT" ]; then
 		prompt_host="%{$fg[green]%}%m "
@@ -87,9 +82,29 @@ else
 fi
 [[ -f ~/.arc-completion.bash ]] && source ~/.arc-completion.bash
 
-export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
-PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 
-if [ -n "$SSH_AUTH_SOCK" ] && [ ! -n "$TMUX" ]; then
-    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
-fi
+# Sovle stale ssh auth https://www.revsys.com/tidbits/ssh_auth_sock-tmux-and-you/
+function _check_ssh_agent() {
+        return $( ssh-add -l >& /dev/null )
+}
+
+function set_ssh_agent() {
+
+        local SAS=${SSH_AUTH_SOCK}
+
+        _check_ssh_agent &&
+                local SSH_AUTH_SOCK=${HOME}/.ssh/ssh_auth_sock
+                _check_ssh_agent ||
+                        ln -sf ${SAS} $HOME/.ssh/ssh_auth_sock
+
+        # recall, "||" and "&&" operate on the 0/non-0 property
+        # of the called function's return value. If the check succeeds
+        # with the alternative socket path, the "ssh-add" call returns
+        # 0, so there is nothing more to do. It is only if the alternative
+        # path does not have a functional agent that a non-0 value will
+        # be returned.  "&&" proceeds if 0 is returned. "||" proceeds
+        # if non-0 is returned, thus, "||" is the correct glyph to
+        # use since we have additional work to do.
+}
+
+set_ssh_agent
